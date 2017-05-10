@@ -1,8 +1,8 @@
 var React = require("react");
 var ReactDOM = require("react-dom");
+import MapMain from './components/MapMain.js';
 
-// Grabs the Routes
-var routes = require("./routes");
+
 
 // Renders the contents according to the route page.
-ReactDOM.render(routes, document.getElementById("app"));
+ReactDOM.render(<MapMain />, document.getElementById("app"));
