@@ -12,10 +12,13 @@ export default class GetMarker extends Component {
             result = "Click a marker to see the related info."
         }
         return(
-            <div className="panel panel-default">
+            <div>
+                <label htmlFor="info">info</label>
+                <div className="panel panel-default">
                     <div className="panel-body">
                         {result}
                     </div>
+                </div>
             </div>
         );
     }

@@ -50,21 +50,18 @@ export default class MapMain extends Component {
       key: `Taiwan`,
       defaultAnimation: 2,
       info: {
-            desc: "hi!",
-            location: {
-                street: "",
-                city: "Charlotte",
-                state: "NC",
-                zip: 11111
-            },
+            desc: "",
+            street: "",
+            city: "",
+            state: "",
+            zip: 11111,
             found: false,
-            foundBy: "",
-            finderContact: "none provided",
-            lostBy: "",
-            loserContact: "none provided"
+            name: "",
+            contact: "none provided"
         },
     }],
     displayedInfo: "",
+    newMarker: false,
   };
 
   handleMapLoad = this.handleMapLoad.bind(this);
@@ -100,22 +97,19 @@ export default class MapMain extends Component {
         key: Date.now(), // Add a key property for: http://fb.me/react-warning-keys
         info: {
             desc: "",
-            location: {
-                street: "",
-                city: "Charlotte",
-                state: "NC",
-                zip: 11111
-            },
+            street: "",
+            city: "",
+            state: "",
+            zip: 11111,
             found: false,
-            foundBy: "",
-            finderContact: "none provided",
-            lostBy: "",
-            loserContact: "none provided"
+            name: "",
+            contact: "none provided"
         } 
       },
     ];
     this.setState({
       markers: nextMarkers,
+      newMarker: true
     });
     console.log(this.state);
   }
@@ -155,10 +149,10 @@ export default class MapMain extends Component {
           </div>
         </div>
         
-          <Inout getInitial={this.state.markers[this.state.markers.length - 1]} getMarkerInfo={this.state.displayedInfo} />
+          <Inout getInitial={this.state.markers[this.state.markers.length - 1]} getMarkerInfo={this.state.displayedInfo} newMarker={this.state.newMarker} />
         
+      </div>
     </div>
-</div>
     );
   }
 }

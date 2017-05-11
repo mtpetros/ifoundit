@@ -30,24 +30,29 @@ export default class Inout extends Component {
     render() {
         return (
             <div className="info-container col-md-8 col-md-offset-2">
-                <div className="row text-center">
-                    <div className="col-md-3 col-md-offset-3">
-                        <button type="button" className="btn btn-primary btn-lg">I Found It!</button>
+                <div className="row">                    
+                    <div className="col-md-4 col-md-offset-1">
+                        <form>
+                            <PostMarker getInitial={this.props.getInitial} newMarker={this.props.newMarker} />
+                        </form>
+                        <div className="row">
+                            <div className="col-md-4 col-md-offset-1">
+                                <button type="button" className="btn btn-primary btn-block">I Found It!</button>
+                            </div>
+                            <div className="col-md-4 col-md-offset-2">
+                                <button type="button" className="btn btn-primary btn-block">I Lost It!</button>
+                            </div>
+                        </div>
                     </div>
-                    <div className="col-md-3">
-                        <button type="button" className="btn btn-primary btn-lg">I Lost It!</button>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-md-5">    
-                        <form className="text-center">
+                    <div className="col-md-4 col-md-offset-2">    
+                        <form>
                             <GetMarker getMarkerInfo={this.props.getMarkerInfo} />
                         </form>
-                    </div>
-                    <div className="col-md-5 col-md-offset-2">
-                        <form>
-                            <PostMarker getInitial={this.props.getInitial} />
-                        </form>
+                        <div className="row">
+                            <div className="col-md-4 col-md-offset-4">
+                                <button type="button" className="btn btn-primary btn-block">Claim It!</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
