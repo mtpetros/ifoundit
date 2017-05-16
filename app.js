@@ -35,8 +35,13 @@ db.on("error", function(err) {
 db.once("open", function() {
   console.log("Mongoose connection successful.");
 });
+
+//require the MongoDB models from Mongoose
+var Marker = require("./models/Marker.js");
+
 // ----------------------------------------------------
 require("./routes/htmlRoutes.js")(app);
+require("./routes/apiRoutes.js")(app, Marker);
 
 // app.use('/', index);
 // app.use('/users', users);
