@@ -1,4 +1,16 @@
-module.exports = function apiRoutes (app, Marker) {
+module.exports = function apiRoutes (app, passport, Marker) {
+    app.post('/signup', passport.authenticate('signup', {
+        successRedirect: '/main',
+        failureRedirect: '/signup',
+        failureFlash : true 
+    }));
+    
+    app.post('/login', passport.authenticate('login', {
+        successRedirect: '/main',
+        failureRedirect: '/',
+        failureFlash : true 
+    }));
+    
     app.post("/markers", function(req, res) {
         Marker.create({
             key: req.body.key,

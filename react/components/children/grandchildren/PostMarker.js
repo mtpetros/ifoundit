@@ -16,7 +16,7 @@ export default class PostMarker extends Component {
         state: "",
         zip: "",
         name: "",
-        contact: ""        
+        contact: "",   
     };
 
 handleChange = this.handleChange.bind(this);
@@ -33,11 +33,22 @@ handleChangeRadio(event) {
 
 formSubmit(event) {
     event.preventDefault();    
-    this.props.markerSubmitted(true);
+    this.props.resetMarkerSubmitted(true);
     helper.postMarker(this.props.newMarkerInfo, this.state)
     .then(function(response) {
             console.log(response);
-            // this.props.markerToArray(response);
+
+            helper.getMarker()
+                .then(function(response) {
+                console.log(response.data);
+                if (response.data.length > 0) {
+                    console.log("markers retrieved!");
+                    this.props.submitUpdate(response.data);
+                } else {
+                    console.log("You don\'t have any markers saved in the DB!");
+                }
+            }.bind(this))
+            
             this.setState({
                 desc: "",
                 street: "",
@@ -67,6 +78,16 @@ formSubmit(event) {
                 lOrF = "Lost or Found?";
             }
 
+        let submitButton = null;
+        let submitInfo = null;
+            if (this.props.markerSubmitted) {
+                submitButton = <button type="submit" className="btn btn-primary btn-block" disabled="true">{lOrF}</button>;
+                submitInfo = <p style={{color: 'red'}}>Please place a marker before submitting!</p>;
+            } else {
+                submitButton = <button type="submit" className="btn btn-primary btn-block">{lOrF}</button>;
+                submitInfo = null;
+            }
+
         return (
             <form  onSubmit={this.formSubmit}>
                 <div className="form-group">
@@ -82,7 +103,8 @@ formSubmit(event) {
                     <div><label htmlFor="name">name</label><input type="text" className="form-control" id="name" value={this.state.name} onChange={this.handleChange} /> </div>
                     <div><label htmlFor="contact">contact</label><input type="text" className="form-control" id="contact" value={this.state.contact} onChange={this.handleChange} /> </div>
                 </div>
-                <button type="submit" className="btn btn-primary btn-block">{lOrF}</button>
+                {submitButton}
+                {submitInfo}
             </form>
         );
     }

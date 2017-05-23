@@ -6,6 +6,10 @@
   margin-top: 10px;
 }
 
+.user-greeting {
+  text-align: right;
+}
+
 /*.results {
   width:100%;
   color: black;

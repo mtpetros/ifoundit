@@ -65,15 +65,15 @@ export default class MapMain extends Component {
     newMarkerInfo: undefined,
     markerSubmitted: true
   };
-  componentWillMount = this.componentWillMount.bind(this);
+  componentDidMount = this.componentDidMount.bind(this);
   handleMapLoad = this.handleMapLoad.bind(this);
   handleMarkerInfo = this.handleMarkerInfo.bind(this);
   handleMapClick = this.handleMapClick.bind(this);
   handleMarkerRightClick = this.handleMarkerRightClick.bind(this);
-  handleMarkerImmediateArrayAdd = this.handleMarkerImmediateArrayAdd.bind(this);
   resetMarkerSubmitted = this.resetMarkerSubmitted.bind(this);
+  handleUpdateMarkersOnSubmit = this.handleUpdateMarkersOnSubmit.bind(this);
 
-  componentWillMount() { 
+  componentDidMount() { 
     helper.getMarker()
     .then(function(response) {
       console.log(response.data);
@@ -100,7 +100,6 @@ export default class MapMain extends Component {
 
   handleMarkerInfo(targetMarker) {
     this.setState({ markerInfo: targetMarker});
-    console.log(this.state.displayedInfo);
   }
 
   /*
@@ -141,17 +140,20 @@ export default class MapMain extends Component {
      * This is so called data-driven-development. (And yes, it's now in
      * web front end and even with google maps API.)
      */
-    const nextMarkers = this.state.markers.filter(marker => marker !== targetMarker);
-    this.setState({
-      markers: nextMarkers,
-    });
+    if (!targetMarker._id) {
+      const nextMarkers = this.state.markers.filter(marker => marker !== targetMarker);
+      this.setState({
+        markers: nextMarkers,
+        markerSubmitted: true
+      });
+    } else {
+      console.log("This marker has already been submitted!");
+    }
   }
 
-  // handleMarkerImmediateArrayAdd(marker) {
-  //   let stringifiedMarker = JSON.parse(marker.config.data);
-  //   const nextMarkers = [...this.state.markers, stringifiedMarker];
-  //   this.setState({markers: nextMarkers});
-  // }
+  handleUpdateMarkersOnSubmit(markers) {
+    this.setState({markers: markers});
+  }
 
   resetMarkerSubmitted(submitted) {
     this.setState({markerSubmitted: submitted});
@@ -180,7 +182,7 @@ export default class MapMain extends Component {
           </div>
         </div>
         
-          <Inout getMarkerInfo={this.state.markerInfo} newMarker={this.state.newMarker} newMarkerInfo={this.state.newMarkerInfo} markerSubmitted={this.resetMarkerSubmitted} />
+          <Inout getMarkerInfo={this.state.markerInfo} newMarker={this.state.newMarker} newMarkerInfo={this.state.newMarkerInfo} resetMarkerSubmitted={this.resetMarkerSubmitted} markerSubmitted={this.state.markerSubmitted} submitUpdate={this.handleUpdateMarkersOnSubmit}/>
         
       </div>
     </div>

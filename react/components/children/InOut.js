@@ -32,7 +32,7 @@ export default class Inout extends Component {
             <div className="info-container col-md-8 col-md-offset-2">
                 <div className="row">                    
                     <div className="col-md-4 col-md-offset-1">
-                        <PostMarker newMarker={this.props.newMarker} newMarkerInfo={this.props.newMarkerInfo} markerSubmitted={this.props.markerSubmitted} />
+                        <PostMarker newMarker={this.props.newMarker} newMarkerInfo={this.props.newMarkerInfo} resetMarkerSubmitted={this.props.resetMarkerSubmitted} markerSubmitted={this.props.markerSubmitted} submitUpdate={this.props.submitUpdate}/>
                         {/*<div className="row">
                             <div className="col-md-4 col-md-offset-1">
                                 <button type="button" className="btn btn-primary btn-block">I Found It!</button>

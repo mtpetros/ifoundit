@@ -2,12 +2,16 @@ var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
+var passport = require('passport');
+var LocalStrategy = require("passport-local").Strategy;
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var mongoose = require("mongoose");
 var exphbs = require("express-handlebars");
-// var index = require('./routes/index');
-// var users = require('./routes/users');
+var flash = require("connect-flash");
+var bcrypt = require("bcrypt-nodejs");
+var methodOverride = require("method-override");
+
 
 var app = express();
 
@@ -21,8 +25,32 @@ app.set('view engine', 'handlebars');
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(cookieParser('keyboardBob'));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(methodOverride("_method"));
+
+// Passport config
+
+var User = require("./models/Users.js");
+
+var expressSession = require('express-session');
+app.use(expressSession({secret: 'keyboardBob'}));
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(flash());
+
+passport.serializeUser(function(user, done) {
+  done(null, user._id);
+});
+ 
+passport.deserializeUser(function(id, done) {
+  User.findById(id, function(err, user) {
+    done(err, user);
+  });
+});
+
+require("./passport/login.js")(passport, bcrypt, LocalStrategy, User);
+require("./passport/signup.js")(passport, bcrypt, LocalStrategy, User);
 
 // MongoDB config -------------------------------------
 mongoose.connect("mongodb://localhost/ifoundit");
@@ -41,10 +69,10 @@ var Marker = require("./models/Marker.js");
 
 // ----------------------------------------------------
 require("./routes/htmlRoutes.js")(app);
-require("./routes/apiRoutes.js")(app, Marker);
+require("./routes/apiRoutes.js")(app, passport, Marker);
+// require("./routes/passport.js")(app, passport);
 
-// app.use('/', index);
-// app.use('/users', users);
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

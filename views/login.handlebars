@@ -1,0 +1,28 @@
+<div class="container">
+    <div class="row">
+        <form class="form-horizontal" action="/login" method="POST">
+        <div class="form-group">
+            <label for="email" class="col-md-4 control-label">Email</label>
+            <div class="col-md-4">
+            <input type="email" class="form-control" name="username" id="email" placeholder="Email">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="password" class="col-md-4 control-label">Password</label>
+            <div class="col-md-4">
+            <input type="password" class="form-control" name="password" id="password" placeholder="Password">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-4 col-md-4">
+            <button type="submit" class="btn btn-default">Sign in</button>
+            </div>
+        </div>
+        </form>
+        <div class="flash-message">
+            {{#info}}
+                <p>{{message}}</p>
+            {{/info}}
+        </div>
+    </div>
+</div>
