@@ -33,22 +33,14 @@ export default class Inout extends Component {
                 <div className="row">                    
                     <div className="col-md-4 col-md-offset-1">
                         <PostMarker newMarker={this.props.newMarker} newMarkerInfo={this.props.newMarkerInfo} resetMarkerSubmitted={this.props.resetMarkerSubmitted} markerSubmitted={this.props.markerSubmitted} submitUpdate={this.props.submitUpdate}/>
-                        {/*<div className="row">
-                            <div className="col-md-4 col-md-offset-1">
-                                <button type="button" className="btn btn-primary btn-block">I Found It!</button>
-                            </div>
-                            <div className="col-md-4 col-md-offset-2">
-                                <button type="button" className="btn btn-primary btn-block">I Lost It!</button>
-                            </div>
-                        </div>*/}
                     </div>
                     <div className="col-md-4 col-md-offset-2">    
-                        <form>
+                        
                             <GetMarker getMarkerInfo={this.props.getMarkerInfo} />
-                        </form>
+                        
                         <div className="row">
-                            <div className="col-md-4 col-md-offset-4">
-                                <button type="button" className="btn btn-primary btn-block">Claim It!</button>
+                            <div className="col-md-6 col-md-offset-3">
+                                <button type="button" className="btn btn-primary btn-block disabled">leave a message</button>
                             </div>
                         </div>
                     </div>

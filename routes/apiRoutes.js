@@ -1,4 +1,4 @@
-module.exports = function apiRoutes (app, passport, Marker) {
+module.exports = function apiRoutes (app, passport, Marker, ensureAuthenticated) {
     app.post('/signup', passport.authenticate('signup', {
         successRedirect: '/main',
         failureRedirect: '/signup',
@@ -11,7 +11,7 @@ module.exports = function apiRoutes (app, passport, Marker) {
         failureFlash : true 
     }));
     
-    app.post("/markers", function(req, res) {
+    app.post("/markers", ensureAuthenticated, function(req, res) {
         Marker.create({
             key: req.body.key,
             defaultAnimation: req.body.defaultAnimation,
@@ -19,6 +19,7 @@ module.exports = function apiRoutes (app, passport, Marker) {
                 lat: req.body.position.lat,
                 lng: req.body.position.lng
             },
+            user: req.user.username,
             lostOrFound: req.body.lostOrFound,
             desc: req.body.desc,
             street: req.body.street,
@@ -38,14 +39,66 @@ module.exports = function apiRoutes (app, passport, Marker) {
         });
     });
 
-    app.get("/markers", function(req, res) {
-
+    app.get("/markers", ensureAuthenticated, function(req, res) {
         Marker.find({}).exec(function(err, doc) {
             if (err) {
-            console.log(err);
+                console.log(err);
+            } else {
+                res.send(doc);
             }
-            else {
-            res.send(doc);
+        });
+    });
+
+    // app.get("/markers/single", ensureAuthenticated, function(req, res) {
+    //     Marker.find({_id: req.query.id}).exec(function(err, doc) {
+    //         if (err) {
+    //             console.log(err);
+    //         } else {
+    //             res.send(doc);
+    //         }
+    //     });
+    // });
+
+    app.get("/profile/lost", ensureAuthenticated, function(req, res) {
+        console.log("finding loser markers");
+        console.log(req.user.username);
+        Marker.find({})
+        .where('user').equals(req.user.username)
+        .where('lostOrFound').equals('loser')
+        .exec(function(err, doc) {
+            if (err) {
+                console.log(err);
+            } else {
+                res.send(doc);
+            }
+        });
+    });
+
+    app.get("/profile/found", ensureAuthenticated, function(req, res) {
+        console.log("finding finder markers");
+        console.log(req.user.username);
+        Marker.find({})
+        .where('user').equals(req.user.username)
+        .where('lostOrFound').equals('finder')
+        .exec(function(err, doc) {
+            if (err) {
+                console.log(err);
+            } else {
+                res.send(doc);
+            }
+        });
+    });
+
+    app.post("/delete", ensureAuthenticated, function(req, res) {
+        Marker.find({})
+        .where('user').equals(req.user.username)
+        .where('_id').equals(req.query.id)
+        .remove()
+        .exec(function(err, doc) {
+            if (err) {
+                console.log(err);
+            } else {
+                res.redirect('/profile');
             }
         });
     });

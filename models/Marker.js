@@ -17,6 +17,9 @@ var MarkerSchema = new Schema({
   defaultAnimation: {
     type: Number
   },
+  user: {
+    type: String
+  },
   lostOrFound: {
     type: String
   },
@@ -35,15 +38,7 @@ var MarkerSchema = new Schema({
   zip: {
     type: Number
   },
-  position: position,//{
-    
-    // lat: {
-    //   type: Number
-    // },
-    // lng: {
-    //   type: Number
-    // }
-  // },
+  position: position,
   claimed: {
     type: Boolean,
     default: false

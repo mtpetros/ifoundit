@@ -49,6 +49,14 @@ passport.deserializeUser(function(id, done) {
   });
 });
 
+var ensureAuthenticated = function(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  } else {
+    res.redirect('/')
+  }
+};
+
 require("./passport/login.js")(passport, bcrypt, LocalStrategy, User);
 require("./passport/signup.js")(passport, bcrypt, LocalStrategy, User);
 
@@ -66,10 +74,11 @@ db.once("open", function() {
 
 //require the MongoDB models from Mongoose
 var Marker = require("./models/Marker.js");
+var Message = require("./models/Message.js");
 
 // ----------------------------------------------------
-require("./routes/htmlRoutes.js")(app);
-require("./routes/apiRoutes.js")(app, passport, Marker);
+require("./routes/htmlRoutes.js")(app, Marker, Message, ensureAuthenticated);
+require("./routes/apiRoutes.js")(app, passport, Marker, ensureAuthenticated);
 // require("./routes/passport.js")(app, passport);
 
 

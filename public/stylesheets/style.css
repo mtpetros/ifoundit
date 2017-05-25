@@ -1,13 +1,54 @@
+body {
+  font-family: 'Khula', sans-serif;
+}
+
+.navbar {
+  margin-bottom: 5px;
+}
+
+.user-greeting {
+  margin-right: 5px;
+}
+
+.profile-name {
+  margin-bottom: 30px;
+}
+
 .map-container {
   height: 400px;
 }
 
 .info-container {
-  margin-top: 10px;
+  margin-top: 30px;
+}
+
+.get-info {
+  margin-top: 15px;
+}
+
+.radio-choice {
+  margin-top: 5px;
 }
 
 .user-greeting {
   text-align: right;
+}
+
+.marker-item {
+  margin-bottom: 0px;
+}
+
+.delete-button {
+  margin-bottom: 5px;
+}
+
+.flexbox {
+  display: flex;
+}
+
+.delete-button, .details-button, .marker-item {
+  margin-right: 5px;
+  margin-top: 5px;
 }
 
 /*.results {

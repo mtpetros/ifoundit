@@ -82,7 +82,7 @@ formSubmit(event) {
         let submitInfo = null;
             if (this.props.markerSubmitted) {
                 submitButton = <button type="submit" className="btn btn-primary btn-block" disabled="true">{lOrF}</button>;
-                submitInfo = <p style={{color: 'red'}}>Please place a marker before submitting!</p>;
+                submitInfo = <p className="text-center" style={{color: 'red'}}>Please place a marker before submitting!</p>;
             } else {
                 submitButton = <button type="submit" className="btn btn-primary btn-block">{lOrF}</button>;
                 submitInfo = null;
@@ -91,10 +91,6 @@ formSubmit(event) {
         return (
             <form  onSubmit={this.formSubmit}>
                 <div className="form-group">
-                    <div className="text-center">
-                        <div className="form-check radio-inline"><label className="form-check-label"><input type="radio" className="form-check-input" name="lostOrFound" id="finder" value="finder" onChange={this.handleChangeRadio} />I Found It!</label></div>
-                        <div className="form-check radio-inline"><label className="form-check-label"><input type="radio" className="form-check-input" name="lostOrFound" id="loser" value="loser" onChange={this.handleChangeRadio} />I Lost It!</label></div>
-                    </div>
                     <div><label htmlFor="description">description</label><input type="text" className="form-control" id="desc" value={this.state.desc} onChange={this.handleChange} required /> </div>
                     <div><label htmlFor="street">street</label><input type="text" className="form-control" id="street" value={this.state.street} onChange={this.handleChange} /> </div>
                     <div><label htmlFor="city">city</label><input type="text" className="form-control" id="city" value={this.state.city} onChange={this.handleChange} /> </div>
@@ -102,6 +98,10 @@ formSubmit(event) {
                     <div><label htmlFor="zip">zip</label><input type="text" className="form-control" id="zip" value={this.state.zip} onChange={this.handleChange} /> </div>
                     <div><label htmlFor="name">name</label><input type="text" className="form-control" id="name" value={this.state.name} onChange={this.handleChange} /> </div>
                     <div><label htmlFor="contact">contact</label><input type="text" className="form-control" id="contact" value={this.state.contact} onChange={this.handleChange} /> </div>
+                    <div className="radio-choice text-center">
+                        <div className="form-check radio-inline"><label className="form-check-label"><input type="radio" className="form-check-input" name="lostOrFound" id="finder" value="finder" onChange={this.handleChangeRadio} />I Found It!</label></div>
+                        <div className="form-check radio-inline"><label className="form-check-label"><input type="radio" className="form-check-input" name="lostOrFound" id="loser" value="loser" onChange={this.handleChangeRadio} />I Lost It!</label></div>
+                    </div>
                 </div>
                 {submitButton}
                 {submitInfo}

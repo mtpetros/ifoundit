@@ -9,9 +9,10 @@ export default class GetMarker extends Component {
         let displayedMarker = {};
         if (markerInfo) {
             return(
-                <div>
-                    <label htmlFor="info">info</label>
+                <div className="get-info">
+                    
                     <div className="panel panel-default">
+                        <div className="panel-heading">info</div>
                         <div className="panel-body">
                             <p>description: {markerInfo.desc}</p>
                             <p>street: {markerInfo.street}</p>
@@ -26,9 +27,10 @@ export default class GetMarker extends Component {
             );
         } else {
             return(
-                <div>
-                    <label htmlFor="info">info</label>
+                <div className="get-info">
+                    
                     <div className="panel panel-default">
+                        <div className="panel-heading">info</div>
                         <div className="panel-body">
                             <p>Click a marker to see its related info.</p>
                         </div>
