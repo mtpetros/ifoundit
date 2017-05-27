@@ -16,6 +16,8 @@ import {
 import Navbar from './children/Navbar.js';
 import Inout from './children/InOut.js';
 
+var helper = require('../helpers.js');
+
 /*
  * This is the modify version of:
  * https://developers.google.com/maps/documentation/javascript/examples/event-arguments
@@ -49,25 +51,42 @@ export default class MapMain extends Component {
       },
       key: `Taiwan`,
       defaultAnimation: 2,
-      info: {
-            desc: "",
-            street: "",
-            city: "",
-            state: "",
-            zip: 11111,
-            found: false,
-            name: "",
-            contact: "none provided"
-        },
+      desc: "",
+      street: "",
+      city: "",
+      state: "",
+      zip: 11111,
+      claimed: false,
+      name: "",
+      contact: "none provided"
     }],
-    displayedInfo: "",
+    markerInfo: "",
     newMarker: false,
+    newMarkerInfo: undefined,
+    markerSubmitted: true
   };
-
+  componentDidMount = this.componentDidMount.bind(this);
   handleMapLoad = this.handleMapLoad.bind(this);
   handleMarkerInfo = this.handleMarkerInfo.bind(this);
   handleMapClick = this.handleMapClick.bind(this);
   handleMarkerRightClick = this.handleMarkerRightClick.bind(this);
+  resetMarkerSubmitted = this.resetMarkerSubmitted.bind(this);
+  handleUpdateMarkersOnSubmit = this.handleUpdateMarkersOnSubmit.bind(this);
+
+  componentDidMount() { 
+    helper.getMarker()
+    .then(function(response) {
+      console.log(response.data);
+      if (response.data.length > 0) {
+        this.setState({markers: response.data})
+      } else {
+        console.log("You don\'t have any markers saved in the DB!");
+      }
+    }.bind(this))
+    .catch(function(error) {
+      console.log(error);
+    }.bind(this));
+  }
 
 
   handleMapLoad(map) {
@@ -80,8 +99,7 @@ export default class MapMain extends Component {
 
 
   handleMarkerInfo(targetMarker) {
-    this.setState({ displayedInfo: targetMarker.info});
-    console.log(this.state.displayedInfo);
+    this.setState({ markerInfo: targetMarker});
   }
 
   /*
@@ -89,29 +107,31 @@ export default class MapMain extends Component {
    * Go and try click now.
    */
   handleMapClick(event) {
-    const nextMarkers = [
-      ...this.state.markers,
-      {
-        position: event.latLng,
-        defaultAnimation: 2,
-        key: Date.now(), // Add a key property for: http://fb.me/react-warning-keys
-        info: {
-            desc: "",
-            street: "",
-            city: "",
-            state: "",
-            zip: 11111,
-            found: false,
-            name: "",
-            contact: "none provided"
-        } 
-      },
-    ];
-    this.setState({
-      markers: nextMarkers,
-      newMarker: true
-    });
-    console.log(this.state);
+    if (this.state.markerSubmitted) {
+      const nextMarkers = [
+        ...this.state.markers,
+        {
+          position: event.latLng,
+          defaultAnimation: 2,
+          key: Date.now(), // Add a key property for: http://fb.me/react-warning-keys
+          lostOrFound: "",
+          desc: "",
+          street: "",
+          city: "",
+          state: "",
+          zip: 11111,
+          claimed: false,
+          name: "",
+          contact: "none provided"      
+        },
+      ];
+      this.setState({
+        markers: nextMarkers,
+        newMarker: true,
+        newMarkerInfo: nextMarkers[nextMarkers.length - 1],
+        markerSubmitted: false
+      });
+    }
   }
 
   handleMarkerRightClick(targetMarker) {
@@ -120,10 +140,23 @@ export default class MapMain extends Component {
      * This is so called data-driven-development. (And yes, it's now in
      * web front end and even with google maps API.)
      */
-    const nextMarkers = this.state.markers.filter(marker => marker !== targetMarker);
-    this.setState({
-      markers: nextMarkers,
-    });
+    if (!targetMarker._id) {
+      const nextMarkers = this.state.markers.filter(marker => marker !== targetMarker);
+      this.setState({
+        markers: nextMarkers,
+        markerSubmitted: true
+      });
+    } else {
+      console.log("This marker has already been submitted!");
+    }
+  }
+
+  handleUpdateMarkersOnSubmit(markers) {
+    this.setState({markers: markers});
+  }
+
+  resetMarkerSubmitted(submitted) {
+    this.setState({markerSubmitted: submitted});
   }
 
   render() {
@@ -149,7 +182,7 @@ export default class MapMain extends Component {
           </div>
         </div>
         
-          <Inout getInitial={this.state.markers[this.state.markers.length - 1]} getMarkerInfo={this.state.displayedInfo} newMarker={this.state.newMarker} />
+          <Inout getMarkerInfo={this.state.markerInfo} newMarker={this.state.newMarker} newMarkerInfo={this.state.newMarkerInfo} resetMarkerSubmitted={this.resetMarkerSubmitted} markerSubmitted={this.state.markerSubmitted} submitUpdate={this.handleUpdateMarkersOnSubmit}/>
         
       </div>
     </div>
